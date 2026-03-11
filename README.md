@@ -97,68 +97,6 @@ Essa classe representa falhas na aplicação e pode ser utilizada em diferentes 
 
 ---
 
-## 💾 Cache local
-
-Foi implementado um **cache simples em memória** para armazenar os produtos carregados anteriormente.
-
-Arquivo:
-
-```
-lib/data/datasources/product_cache_datasource.dart
-```
-
-Caso a API esteja indisponível, o sistema utiliza os dados armazenados no cache.
-
----
-
-# 🔁 Fluxo de funcionamento
-
-1. O **ViewModel** solicita os produtos ao **Repository**
-2. O **Repository** tenta buscar os dados na **API**
-3. Se funcionar:
-
-   * salva os dados no **cache**
-   * retorna os produtos
-4. Se falhar:
-
-   * verifica se existe **cache**
-   * se existir → usa o cache
-   * se não existir → retorna erro
-
----
-
-# 🖥️ Comportamento da Interface
-
-A interface reage ao estado do `ProductState`:
-
-### ⏳ Carregando
-
-Exibe:
-
-```
-CircularProgressIndicator
-```
-
-### ❌ Erro
-
-Exibe:
-
-```
-Mensagem de erro na tela
-```
-
-### 📦 Sucesso
-
-Exibe:
-
-```
-Lista de produtos
-- nome
-- preço
-```
-
----
-
 # 🚀 Resultado Esperado
 
 Após a refatoração, a aplicação deve:
@@ -175,7 +113,6 @@ Após a refatoração, a aplicação deve:
 * Flutter
 * Dart
 * FakeStore API
-* Clean Architecture
 * MVVM
 
 ---
