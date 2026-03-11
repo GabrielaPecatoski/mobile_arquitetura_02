@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:product_app/data/datasources/product_cache_datasource.dart';
 import 'package:product_app/data/datasources/product_remote_datasource.dart';
 import 'package:product_app/data/repositories/product_repository_impl.dart';
 import 'package:product_app/presentation/viewmodels/product_viewmodel.dart';
@@ -18,8 +19,12 @@ void main() {
   testWidgets('Product page displays products', (WidgetTester tester) async {
     // Setup - Injeção de dependência para teste
     final httpClient = http.Client();
-    final datasource = ProductRemoteDatasource(httpClient);
-    final repository = ProductRepositoryImpl(datasource);
+    final remoteDatasource = ProductRemoteDatasource(httpClient);
+    final cacheDatasource = ProductCacheDatasource();
+    final repository = ProductRepositoryImpl(
+      remote: remoteDatasource,
+      cache: cacheDatasource,
+    );
     final viewModel = ProductViewModel(repository);
 
     // Build our app and trigger a frame.
