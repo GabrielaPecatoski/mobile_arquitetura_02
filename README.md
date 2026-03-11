@@ -1,42 +1,61 @@
-# Atividade Guiada 2 – Refatoração Arquitetural
+# Questionário de Reflexão (Atividade 2)
 
-## 📱 Desenvolvimento para Dispositivos Móveis II
+## 1️-Em qual camada foi implementado o mecanismo de cache?
+R: O cache foi implementado no datasources, dentro do `Product_Cache_Datasource`.
+Essa camada é responsável pelo gerenciamento das fontes de dados da aplicação, como APIs, banco de dados e armazenamento local. Com isso, o cache funciona como uma fonte alternativa de dados, permitindo reutilizar informações previamente carregadas quando a API não estiver disponível.
 
-**Professor:** Jefferson Rodrigo Speck
+## 2️- Por que o ViewModel não deve realizar chamadas HTTP diretamente?
+R: O ViewModel não deve realizar chamadas HTTP diretamente porque isso quebraria o princípio de separação de responsabilidades. 
+
+## 3️- O que poderia acontecer se a interface acessasse diretamente o DataSource?
+R: A arquitetura em camadas seria quebrada, haveria forte acoplamento entre interface e acesso a dados, o código se tornaria mais difícil de manter e mudanças na fonte de dados exigiriam alterações na interface.
+
+##4- Como essa arquitetura facilitaria a substituição da API por um banco de dados local?
+R: O ViewModel acessa os dados através do Repository, utilizando o método repository.getProducts(), O que significa que o ViewModel não sabe de onde os dados vêm, porém se fosse necessário substituir a API por um banco de dados local, deveria criar um LocalDatasource e alterar a implementação do Repository. Com isso, a interface e o ViewModel não precisariam ser modificados, demonstrando a vantagem da arquitetura em camadas.
+
+# 📱 Mobile Arquitetura 02
+
+Aplicação Flutter desenvolvida para a disciplina **Desenvolvimento para Dispositivos Móveis II**, com foco na aplicação de **arquitetura em camadas** e boas práticas de desenvolvimento.
+
+A aplicação consome a **Fake Store API** para listar produtos e foi evoluída com melhorias arquiteturais como tratamento de erros, estado de carregamento e cache local.
 
 ---
 
-## 📖 Descrição
+Disciplina: **Desenvolvimento para Dispositivos Móveis II**
+Professor: **Jefferson Rodrigo Speck**
 
-Após a implementação inicial da aplicação Flutter que consome a API de produtos, foi realizada uma **refatoração arquitetural** para adicionar funcionalidades essenciais presentes em aplicações modernas.
+---
 
-Esta atividade tem como objetivo melhorar a estrutura do sistema e a experiência do usuário através da implementação de:
+# 📚 API Utilizada
 
-* tratamento de erros
-* estado de carregamento da interface
-* mecanismo simples de cache local
-
-Essas melhorias demonstram como a **arquitetura em camadas** facilita a evolução do sistema sem comprometer sua organização.
-
-A aplicação utiliza a API:
+Fake Store API
 
 https://fakestoreapi.com/products
+
+Essa API fornece uma lista de produtos com informações como:
+
+* id
+* title
+* price
+* image
 
 ---
 
 # 🎯 Objetivo da Atividade
 
-Refatorar o projeto Flutter para que ele seja capaz de:
+Refatorar a aplicação Flutter adicionando funcionalidades essenciais em aplicações modernas:
 
-* Informar ao usuário quando os dados estão sendo carregados
-* Tratar falhas de comunicação com a API
-* Utilizar dados previamente carregados quando não houver conexão com a API
+* indicador de carregamento da interface
+* tratamento de erros
+* mecanismo simples de cache local
+
+Essas melhorias demonstram como a **arquitetura em camadas facilita a evolução do sistema** sem comprometer sua organização.
 
 ---
 
-# 🏗️ Arquitetura Utilizada
+# 🏗️ Arquitetura do Projeto
 
-O projeto segue uma estrutura em camadas inspirada em **Clean Architecture**:
+O projeto segue uma estrutura inspirada em **Clean Architecture** e **MVVM**.
 
 ```
 lib/
@@ -75,50 +94,77 @@ lib/
 
 ## 🔄 Estado de carregamento
 
-Foi criado um **ProductState** que representa o estado da interface:
+Foi criado um `ProductState` responsável por representar o estado da interface:
 
 * carregando dados
 * erro ao carregar
 * produtos carregados com sucesso
 
-Isso permite que a interface reaja dinamicamente ao estado atual da aplicação.
+Isso permite que a interface reaja dinamicamente às mudanças de estado.
 
 ---
 
 ## ❌ Tratamento de erros
 
-Foi criada uma estrutura de erro padronizada na camada **core**:
+Foi criada uma classe de erro padronizada na camada **core**.
+
+Arquivo:
 
 ```
 lib/core/errors/failure.dart
 ```
 
-Essa classe representa falhas na aplicação e pode ser utilizada em diferentes camadas do sistema.
+Essa estrutura permite tratar erros de forma consistente em toda a aplicação.
 
 ---
 
-# 🚀 Resultado Esperado
 
-Após a refatoração, a aplicação deve:
+# 🔁 Fluxo de funcionamento
 
-* mostrar indicador de carregamento ao buscar dados
-* tratar falhas de comunicação com a API
-* utilizar dados em cache caso a API esteja indisponível
-* manter a arquitetura organizada em camadas
+1️⃣ O **ViewModel** solicita os produtos ao **Repository**
+
+2️⃣ O **Repository** tenta buscar os dados na **API**
+
+3️⃣ Se a API responder:
+
+* os dados são salvos no **cache**
+* os produtos são retornados
+
+4️⃣ Se a API falhar:
+
+* o sistema verifica se existe **cache**
+* se existir → usa os dados armazenados
+* se não existir → retorna erro
 
 ---
 
-# 🛠️ Tecnologias Utilizadas
+# 🖥️ Comportamento da Interface
+
+A interface reage ao estado do `ProductState`.
+
+### ⏳ Carregando
+
+Exibe um indicador de carregamento:
+
+```
+CircularProgressIndicator
+```
+
+### ❌ Erro
+
+Exibe uma mensagem de erro na tela.
+
+### 📦 Sucesso
+
+Exibe uma lista de produtos contendo:
+
+* nome
+* preço
+
+# 🚀 Tecnologias Utilizadas
 
 * Flutter
 * Dart
 * FakeStore API
+* Clean Architecture
 * MVVM
-
----
-
-# 📚 API utilizada
-
-Fake Store API
-
-https://fakestoreapi.com/products
