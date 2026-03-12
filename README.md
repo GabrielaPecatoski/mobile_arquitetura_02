@@ -10,7 +10,7 @@ R: O ViewModel não deve realizar chamadas HTTP diretamente porque isso quebrari
 ## 3️- O que poderia acontecer se a interface acessasse diretamente o DataSource?
 R: A arquitetura em camadas seria quebrada, haveria forte acoplamento entre interface e acesso a dados, o código se tornaria mais difícil de manter e mudanças na fonte de dados exigiriam alterações na interface.
 
-##4- Como essa arquitetura facilitaria a substituição da API por um banco de dados local?
+## 4- Como essa arquitetura facilitaria a substituição da API por um banco de dados local?
 R: O ViewModel acessa os dados através do Repository, utilizando o método repository.getProducts(), O que significa que o ViewModel não sabe de onde os dados vêm, porém se fosse necessário substituir a API por um banco de dados local, deveria criar um LocalDatasource e alterar a implementação do Repository. Com isso, a interface e o ViewModel não precisariam ser modificados, demonstrando a vantagem da arquitetura em camadas.
 
 # 📱 Mobile Arquitetura 02
